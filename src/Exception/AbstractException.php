@@ -32,10 +32,10 @@ abstract class AbstractException extends \RuntimeException
         }
 
         $joinString      = "\n- ";
-        $alerts          = \imap_alerts();
-        $errors          = \imap_errors();
+        $alerts          = \imap2_alerts();
+        $errors          = \imap2_errors();
         $completeMessage = \sprintf(
-            "%s%s\nimap_alerts (%s):%s\nimap_errors (%s):%s",
+            "%s%s\nimap2_alerts (%s):%s\nimap2_errors (%s):%s",
             $errorType,
             $message,
             false !== $alerts ? \count($alerts) : 0,

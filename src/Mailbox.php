@@ -66,10 +66,10 @@ final class Mailbox implements MailboxInterface
 
     public function count()
     {
-        $return = \imap_num_msg($this->resource->getStream());
+        $return = \imap2_num_msg($this->resource->getStream());
 
         if (false === $return) {
-            throw new ImapNumMsgException('imap_num_msg failed');
+            throw new ImapNumMsgException('imap2_num_msg failed');
         }
 
         return $return;
@@ -77,10 +77,10 @@ final class Mailbox implements MailboxInterface
 
     public function getStatus(int $flags = null): \stdClass
     {
-        $return = \imap_status($this->resource->getStream(), $this->getFullEncodedName(), $flags ?? \SA_ALL);
+        $return = \imap2_status($this->resource->getStream(), $this->getFullEncodedName(), $flags ?? \SA_ALL);
 
         if (false === $return) {
-            throw new ImapStatusException('imap_status failed');
+            throw new ImapStatusException('imap2_status failed');
         }
 
         return $return;
@@ -88,12 +88,12 @@ final class Mailbox implements MailboxInterface
 
     public function setFlag(string $flag, $numbers): bool
     {
-        return \imap_setflag_full($this->resource->getStream(), $this->prepareMessageIds($numbers), $flag, \ST_UID);
+        return \imap2_setflag_full($this->resource->getStream(), $this->prepareMessageIds($numbers), $flag, \ST_UID);
     }
 
     public function clearFlag(string $flag, $numbers): bool
     {
-        return \imap_clearflag_full($this->resource->getStream(), $this->prepareMessageIds($numbers), $flag, \ST_UID);
+        return \imap2_clearflag_full($this->resource->getStream(), $this->prepareMessageIds($numbers), $flag, \ST_UID);
     }
 
     public function getMessages(ConditionInterface $search = null, int $sortCriteria = null, bool $descending = false, string $charset = null): MessageIteratorInterface
@@ -107,9 +107,9 @@ final class Mailbox implements MailboxInterface
             $descending = (int) $descending;
         }
 
-        // We need to clear the stack to know whether imap_last_error()
-        // is related to this imap_search
-        \imap_errors();
+        // We need to clear the stack to know whether imap2_last_error()
+        // is related to this imap2_search
+        \imap2_errors();
 
         if (null !== $sortCriteria) {
             $params = [
@@ -122,7 +122,7 @@ final class Mailbox implements MailboxInterface
             if (null !== $charset) {
                 $params[] = $charset;
             }
-            $messageNumbers = \imap_sort(...$params);
+            $messageNumbers = \imap2_sort(...$params);
         } else {
             $params = [
                 $this->resource->getStream(),
@@ -132,16 +132,16 @@ final class Mailbox implements MailboxInterface
             if (null !== $charset) {
                 $params[] = $charset;
             }
-            $messageNumbers = \imap_search(...$params);
+            $messageNumbers = \imap2_search(...$params);
         }
-        if (false !== \imap_last_error()) {
+        if (false !== \imap2_last_error()) {
             // this way all errors occurred during search will be reported
             throw new InvalidSearchCriteriaException(
                 \sprintf('Invalid search criteria [%s]', $query)
             );
         }
         if (false === $messageNumbers) {
-            // imap_search can also return false
+            // imap2_search can also return false
             $messageNumbers = [];
         }
 
@@ -150,10 +150,10 @@ final class Mailbox implements MailboxInterface
 
     public function getMessageSequence(string $sequence): MessageIteratorInterface
     {
-        \imap_errors();
+        \imap2_errors();
 
-        $overview = \imap_fetch_overview($this->resource->getStream(), $sequence, \FT_UID);
-        if (false !== \imap_last_error()) {
+        $overview = \imap2_fetch_overview($this->resource->getStream(), $sequence, \FT_UID);
+        if (false !== \imap2_last_error()) {
             throw new InvalidSearchCriteriaException(
                 \sprintf('Invalid sequence [%s]', $sequence)
             );
@@ -189,7 +189,7 @@ final class Mailbox implements MailboxInterface
             $arguments[] = $internalDate->format('d-M-Y H:i:s O');
         }
 
-        return \imap_append(...$arguments);
+        return \imap2_append(...$arguments);
     }
 
     public function getThread(): array
@@ -199,7 +199,7 @@ final class Mailbox implements MailboxInterface
         });
 
         /** @var array<string, int>|false $tree */
-        $tree = \imap_thread($this->resource->getStream(), \SE_UID);
+        $tree = \imap2_thread($this->resource->getStream(), \SE_UID);
 
         \restore_error_handler();
 
@@ -208,14 +208,14 @@ final class Mailbox implements MailboxInterface
 
     public function move($numbers, MailboxInterface $mailbox): void
     {
-        if (!\imap_mail_copy($this->resource->getStream(), $this->prepareMessageIds($numbers), $mailbox->getEncodedName(), \CP_UID | \CP_MOVE)) {
+        if (!\imap2_mail_copy($this->resource->getStream(), $this->prepareMessageIds($numbers), $mailbox->getEncodedName(), \CP_UID | \CP_MOVE)) {
             throw new MessageMoveException(\sprintf('Messages cannot be moved to "%s"', $mailbox->getName()));
         }
     }
 
     public function copy($numbers, MailboxInterface $mailbox): void
     {
-        if (!\imap_mail_copy($this->resource->getStream(), $this->prepareMessageIds($numbers), $mailbox->getEncodedName(), \CP_UID)) {
+        if (!\imap2_mail_copy($this->resource->getStream(), $this->prepareMessageIds($numbers), $mailbox->getEncodedName(), \CP_UID)) {
             throw new MessageCopyException(\sprintf('Messages cannot be copied to "%s"', $mailbox->getName()));
         }
     }

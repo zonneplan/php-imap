@@ -55,7 +55,7 @@ final class ImapResource implements ImapResourceInterface
             return;
         }
 
-        \imap_reopen($this->resource, $this->mailbox->getFullEncodedName());
+        \imap2_reopen($this->resource, $this->mailbox->getFullEncodedName());
 
         if (self::isMailboxOpen($this->mailbox, $this->resource)) {
             return;
@@ -77,7 +77,7 @@ final class ImapResource implements ImapResourceInterface
         }
 
         self::$lastMailboxUsedCache = null;
-        $check                      = \imap_check($resource);
+        $check                      = \imap2_check($resource);
         $return                     = false !== $check && $check->Mailbox === $currentMailboxName;
 
         if (true === $return) {

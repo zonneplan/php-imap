@@ -13,7 +13,7 @@ final class EmbeddedMessage extends AbstractMessage implements EmbeddedMessageIn
     public function getHeaders(): Headers
     {
         if (null === $this->headers) {
-            $this->headers = new Headers(\imap_rfc822_parse_headers($this->getRawHeaders()));
+            $this->headers = new Headers(\imap2_rfc822_parse_headers($this->getRawHeaders()));
         }
 
         return $this->headers;

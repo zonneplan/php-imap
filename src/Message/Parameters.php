@@ -42,7 +42,7 @@ class Parameters extends \ArrayIterator
 
     final protected function decode(string $value): string
     {
-        $parts = \imap_mime_header_decode($value);
+        $parts = \imap2_mime_header_decode($value);
         if (!\is_array($parts)) {
             return $value;
         }

@@ -242,7 +242,7 @@ abstract class AbstractPart implements PartInterface
      */
     final protected function doGetContent(string $partNumber): string
     {
-        $return = \imap_fetchbody(
+        $return = \imap2_fetchbody(
             $this->resource->getStream(),
             $this->getNumber(),
             $partNumber,
@@ -250,7 +250,7 @@ abstract class AbstractPart implements PartInterface
         );
 
         if (false === $return) {
-            throw new ImapFetchbodyException('imap_fetchbody failed');
+            throw new ImapFetchbodyException('imap2_fetchbody failed');
         }
 
         return $return;

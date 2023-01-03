@@ -25,16 +25,17 @@
         "php": "^7.4 || ^8.0.1",
         "ext-iconv": "*",
         "ext-imap": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "javanile/php-imap2": "^0.1.10"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^v3.1.0",
-        "laminas/laminas-mail": "^2.15.0",
+        "friendsofphp/php-cs-fixer": "^v3.13.2",
+        "laminas/laminas-mail": "^2.16.0",
         "malukenho/mcbumpface": "^1.1.5",
-        "phpstan/phpstan": "^0.12.99",
+        "phpstan/phpstan": "^0.12.100",
         "phpstan/phpstan-phpunit": "^0.12.22",
         "phpstan/phpstan-strict-rules": "^0.12.11",
-        "phpunit/phpunit": "^9.5.9"
+        "phpunit/phpunit": "^9.5.27"
     },
     "autoload": {
         "psr-4": {

@@ -38,10 +38,10 @@ final class Server implements ServerInterface
         string $port = '993',
         string $flags = '/imap/ssl/validate-cert',
         array $parameters = [],
-        int $options = 0,
+        int $options = OP_XOAUTH2,
         int $retries = 1
     ) {
-        if (!\function_exists('imap_open')) {
+        if (!\function_exists('imap2_open')) {
             throw new \RuntimeException('IMAP extension must be enabled');
         }
 
@@ -72,7 +72,7 @@ final class Server implements ServerInterface
             return true;
         });
 
-        $resource = \imap_open(
+        $resource = \imap2_open(
             $this->getServerString(),
             $username,
             $password,
@@ -91,7 +91,7 @@ final class Server implements ServerInterface
             ), $errorNumber);
         }
 
-        $check = \imap_check($resource);
+        $check = \imap2_check($resource);
 
         if (false === $check) {
             throw new ResourceCheckFailureException('Resource check failure');
@@ -105,8 +105,8 @@ final class Server implements ServerInterface
         }
 
         // These are necessary to get rid of PHP throwing IMAP errors
-        \imap_errors();
-        \imap_alerts();
+        \imap2_errors();
+        \imap2_alerts();
 
         return new Connection(new ImapResource($resource), $connection);
     }
