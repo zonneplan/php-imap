@@ -1,5 +1,5 @@
 {
-    "name": "ddeboer/imap",
+    "name": "mugonix/imap",
     "description": "Object-oriented IMAP for PHP",
     "keywords": [
         "email",
