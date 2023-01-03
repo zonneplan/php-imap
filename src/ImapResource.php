@@ -32,8 +32,7 @@ final class ImapResource implements ImapResourceInterface
 
     public function getStream()
     {
-      echo \get_resource_type($this->resource);
-        if (false === \is_resource($this->resource) || 'imap' !== \get_resource_type($this->resource)) {
+        if (false === \is_resource($this->resource) || 'imap' !== \get_resource_type($this->resource) || !($this->resource instanceof \Javanile\Imap2\Connection)) {
             throw new InvalidResourceException('Supplied resource is not a valid imap resource');
         }
 
@@ -56,7 +55,7 @@ final class ImapResource implements ImapResourceInterface
             return;
         }
 
-        \imap2_reopen($this->resource, $this->mailbox->getFullEncodedName());
+        \imap_reopen($this->resource, $this->mailbox->getFullEncodedName());
 
         if (self::isMailboxOpen($this->mailbox, $this->resource)) {
             return;
@@ -78,7 +77,7 @@ final class ImapResource implements ImapResourceInterface
         }
 
         self::$lastMailboxUsedCache = null;
-        $check                      = \imap2_check($resource);
+        $check                      = \imap_check($resource);
         $return                     = false !== $check && $check->Mailbox === $currentMailboxName;
 
         if (true === $return) {
