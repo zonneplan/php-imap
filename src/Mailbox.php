@@ -48,7 +48,7 @@ final class Mailbox implements MailboxInterface
         $newFullName = \preg_replace('/' . \preg_quote(\mb_convert_encoding($this->name, 'UTF7-IMAP', 'UTF-8')) . '$/', $encodedName, $oldFullName);
         \assert(null !== $newFullName);
 
-        $return = \imap_renamemailbox($this->resource->getStream(), $oldFullName, $newFullName);
+        $return = \imap2_renamemailbox($this->resource->getStream(), $oldFullName, $newFullName);
         if (false === $return) {
             throw new RenameMailboxException('Could not rename mailbox');
         }

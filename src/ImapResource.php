@@ -6,20 +6,21 @@ namespace Ddeboer\Imap;
 
 use Ddeboer\Imap\Exception\ReopenMailboxException;
 use IMAP\Connection;
+use Javanile\Imap2\Connection as OAuthConnection;
 
 /**
  * An imap resource stream.
  */
 final class ImapResource implements ImapResourceInterface
 {
-    private Connection $resource;
+    private Connection|OAuthConnection $resource;
     private ?MailboxInterface $mailbox           = null;
     private static ?string $lastMailboxUsedCache = null;
 
     /**
      * Constructor.
      */
-    public function __construct(Connection $resource, MailboxInterface $mailbox = null)
+    public function __construct(Connection|OAuthConnection $resource, MailboxInterface $mailbox = null)
     {
         $this->resource = $resource;
         $this->mailbox  = $mailbox;
