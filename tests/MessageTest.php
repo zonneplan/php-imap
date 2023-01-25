@@ -17,7 +17,6 @@ use Ddeboer\Imap\Message\Transcoder;
 use Ddeboer\Imap\MessageInterface;
 use Laminas\Mail;
 use Laminas\Mime;
-use ReflectionClass;
 
 /**
  * @covers \Ddeboer\Imap\Connection::expunge
@@ -118,7 +117,7 @@ final class MessageTest extends AbstractTest
 
     public function testLowercaseCharsetAliases(): void
     {
-        $refClass   = new ReflectionClass(Transcoder::class);
+        $refClass   = new \ReflectionClass(Transcoder::class);
         $properties = $refClass->getConstants();
         $aliases    = $properties['CHARSET_ALIASES'];
 
@@ -1009,9 +1008,9 @@ final class MessageTest extends AbstractTest
         // of attachments that don't have it
         $refMessage         = new \ReflectionClass($message);
         $refAbstractMessage = $refMessage->getParentClass();
-        static::assertInstanceOf(ReflectionClass::class, $refAbstractMessage);
+        static::assertInstanceOf(\ReflectionClass::class, $refAbstractMessage);
         $refAbstractPart = $refAbstractMessage->getParentClass();
-        static::assertInstanceOf(ReflectionClass::class, $refAbstractPart);
+        static::assertInstanceOf(\ReflectionClass::class, $refAbstractPart);
 
         $refLazyLoadStructure = $refMessage->getMethod('lazyLoadStructure');
         $refLazyLoadStructure->setAccessible(true);
@@ -1066,5 +1065,21 @@ final class MessageTest extends AbstractTest
         $message = $this->mailbox->getMessage(1);
 
         static::assertSame('Hi', \trim($message->getDecodedContent()));
+    }
+
+    public function testUndefinedCharset(): void
+    {
+        $this->mailbox->addMessage($this->getFixture('undefined_charset_header'));
+
+        $message = $this->mailbox->getMessage(1);
+
+        $headers = $message->getHeaders();
+
+        static::assertCount(1, $message->getTo());
+        static::assertSame('<201702270351.BGF77614@bla.bla>', $headers['message_id']);
+        static::assertArrayNotHasKey('subject', $headers);
+        static::assertArrayNotHasKey('from', $headers);
+        static::assertNull($message->getSubject());
+        static::assertNull($message->getFrom());
     }
 }
