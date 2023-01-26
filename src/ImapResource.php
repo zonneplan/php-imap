@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Ddeboer\Imap;
 
 use Ddeboer\Imap\Exception\ReopenMailboxException;
-use IMAP\Connection;
+use Javanile\Imap2\Connection as Connection;
 
 /**
  * An imap resource stream.
