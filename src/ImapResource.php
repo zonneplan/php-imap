@@ -26,7 +26,7 @@ final class ImapResource implements ImapResourceInterface
         $this->mailbox  = $mailbox;
     }
 
-    public function getStream(): Connection
+    public function getStream(): Connection|OAuthConnection
     {
         $this->initMailbox();
 
