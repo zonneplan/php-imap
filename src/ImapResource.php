@@ -65,7 +65,7 @@ final class ImapResource implements ImapResourceInterface
     /**
      * Check whether the current mailbox is open.
      */
-    private static function isMailboxOpen(MailboxInterface $mailbox, Connection $resource): bool
+    private static function isMailboxOpen(MailboxInterface $mailbox, Connection|OAuthConnection $resource): bool
     {
         $currentMailboxName = $mailbox->getFullEncodedName();
         if ($currentMailboxName === self::$lastMailboxUsedCache) {
