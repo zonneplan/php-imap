@@ -240,7 +240,7 @@ abstract class AbstractPart implements PartInterface
     /**
      * Get raw message content.
      */
-    final protected function doGetContent(string $partNumber): string
+    final protected function doGetContent(string $partNumber): ?string
     {
         $return = \imap2_fetchbody(
             $this->resource->getStream(),
