@@ -40,8 +40,13 @@ class Parameters extends \ArrayIterator
         return $this[$key] ?? null;
     }
 
-    final protected function decode(string $value): string
+    final protected function decode(?string $value): string
     {
+        if(!$value)
+        {
+          return '';
+        }
+
         $parts = \imap2_mime_header_decode($value);
         if (!\is_array($parts)) {
             return $value;
